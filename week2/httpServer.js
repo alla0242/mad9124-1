@@ -8,6 +8,12 @@ const server = createServer((req, res) => {
     res.setHeader("Content-Type", "application/json");
     res.write(JSON.stringify({ data }));
     res.end();
+  } else if (req.url === "/tim") {
+    const data = { message: "HelloTim!" };
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.write(JSON.stringify({ data }));
+    res.end();
   } else {
     res.write("Hello world from Node.js!");
     res.end();
