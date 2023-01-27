@@ -13,17 +13,18 @@ const students = [
 // ENDPOINT: localhost:3000/students
 
 const app = express();
-
 app.use(express.json());
 
 // CREATE
+// curl --header "Content-Type: application/json" localhost:3000/students/ -X PUT -d '{"name":"nicolas", "grade": "A-"}'
 app.post("/students", (req, res) => {
-  const { name } = req.body;
+  const { grade, name } = req.body;
 
   const nextId = parseInt(students[students.length - 1].id, 10) + 1;
 
   const newStudent = {
     id: nextId.toString(),
+    grade,
     name,
   };
 
@@ -46,6 +47,7 @@ app.get("/students/:id", (req, res) => {
 });
 
 // UPDATE
+// curl --header "Content-Type: application/json" localhost:3000/students/name/2 -X PATCH -d '{"name":"nicolas", "grade": "A-"}'
 app.put("/students/:id", (req, res) => {
   const { id } = req.params;
   const { name, grade } = req.body;
@@ -63,9 +65,17 @@ app.put("/students/:id", (req, res) => {
 });
 
 // UPDATE
+// curl --header "Content-Type: application/json" localhost:3000/students/grade/2 -X PATCH -d '{"grade":"B+"}'
 app.patch("/students/grade/:id", (req, res) => {
   const { id } = req.params;
   const { grade } = req.body;
+
+  if (!grade) {
+    res.status(400).json({
+      error: "Grade not provided",
+    });
+    return;
+  }
 
   const studentIdx = students.findIndex((student) => student.id === id);
   students[studentIdx].grade = grade;
@@ -76,6 +86,7 @@ app.patch("/students/grade/:id", (req, res) => {
 });
 
 // UPDATE
+// curl --header "Content-Type: application/json" localhost:3000/students/name/2 -X PATCH -d '{"name":"nicolas"}'
 app.patch("/students/name/:id", (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
@@ -88,6 +99,8 @@ app.patch("/students/name/:id", (req, res) => {
   });
 });
 
+// UPDATE
+// curl --header "Content-Type: application/json" localhost:3000/students/2 -X PATCH -d '{"name":"nicolas", "grade": "A-"}'
 app.patch("/studentsv1/:id", (req, res) => {
   const { id } = req.params;
   const studentUpdates = req.body;
@@ -100,6 +113,8 @@ app.patch("/studentsv1/:id", (req, res) => {
   });
 });
 
+// DELETE
+// curl --header "Content-Type: application/json" localhost:3000/students/2 -X DELETE
 app.patch("/students/:id", (req, res) => {
   const { id } = req.params;
   const studentUpdates = req.body;
