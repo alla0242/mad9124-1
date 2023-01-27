@@ -23,15 +23,22 @@ app.get("/", (_, res) => {
 // curl --header "Content-Type: application/json" localhost:3000/students -X POST -d '{"name":"diego", "grade": "A+"}'
 app.post("/students", (req, res) => {
   const { name, grade } = req.body;
-  const id = parseInt(students[students.length - 1].id, 10) + 1;
-  const newStudent = {
-    id: id.toString(),
-    name,
-    grade,
-  };
-  students.push(newStudent);
 
-  res.json({ data: newStudent });
+  if (!name || !grade) {
+    res.status(400).json({
+      error: "Name and Grade required",
+    });
+  } else {
+    const id = parseInt(students[students.length - 1].id, 10) + 1;
+    const newStudent = {
+      id: id.toString(),
+      name,
+      grade,
+    };
+    students.push(newStudent);
+
+    res.status(201).json({ data: newStudent });
+  }
 });
 
 // READ
@@ -73,7 +80,7 @@ app.put("/students/:id", (req, res) => {
 
 // UPDATE
 // curl --header "Content-Type: application/json" localhost:3000/students/1/grade -X PATCH -d '{"grade": "B+"}'
-app.patch("/students/:id/grade", (req, res) => {
+app.patch("/students/grade/:id", (req, res) => {
   const { id } = req.params;
   const { grade } = req.body;
 
