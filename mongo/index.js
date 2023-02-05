@@ -17,8 +17,8 @@ app.get("/pokemon", async (_, res) => {
   res.json({ pokemon });
 });
 
-app.get("/pokemon/:id", async (_, res) => {
-  const pokemon = await Pokemon.findById(id);
+app.get("/pokemon/:id", async (req, res) => {
+  const pokemon = await Pokemon.findById(req.params.id);
   res.json({ pokemon });
 });
 
