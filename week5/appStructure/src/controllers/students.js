@@ -1,3 +1,5 @@
+const StudentService = require("../services/students");
+
 const students = [
   { id: "1", name: "tim", grade: "A+" },
   { id: "2", name: "jad", grade: "A+" },
@@ -6,119 +8,46 @@ const students = [
 ];
 
 const getAll = (_, res) => {
-  res.json({
-    data: students,
-  });
+  const data = StudentService.getAll();
+  res.json({ data });
 };
 
 const getOne = (req, res) => {
   const { id } = req.params;
 
-  const student = students.find((student) => student.id === id);
-  if (!student) {
-    res.status(404).json({
-      errors: [
-        {
-          message: `Student with id ${id} not found`,
-        },
-      ],
-    });
-    return;
-  }
-
-  res.json({
-    data: student,
-  });
+  const data = StudentService.getOne(id);
+  res.json({ data });
 };
 
 const create = (req, res) => {
   const { name, grade } = req.body;
 
-  if (!name || !grade) {
-    res.status(400).json({
-      error: "Name and Grade required",
-    });
-  } else {
-    const id = parseInt(students[students.length - 1].id, 10) + 1;
-    const newStudent = {
-      id: id.toString(),
-      name,
-      grade,
-    };
-    students.push(newStudent);
-
-    res.status(201).json({ data: newStudent });
-  }
+  const data = StudentService.create(name, grade);
+  res.status(201).json({ data });
 };
+
 const replace = (req, res) => {
   const { id } = req.params;
-  const newStudentData = req.body;
-  const newStudent = {
-    id,
-    ...newStudentData,
-  };
+  const { name, grade } = req.body;
 
-  const idx = students.findIndex((student) => student.id === id);
-  if (idx < 0) {
-    res.status(404).json({
-      errors: [
-        {
-          message: `Student with id ${id} not found`,
-        },
-      ],
-    });
-    return;
-  }
-
-  students[idx] = newStudent;
-
-  res.json({
-    data: newStudent,
-  });
+  const data = StudentService.replace(id, name, grade);
+  res.json({ data });
 };
+
 const update = (req, res) => {
   const { id } = req.params;
   const updatedFields = req.body;
 
-  const idx = students.findIndex((student) => student.id === id);
+  const data = StudentService.update(id, updatedFields);
 
-  if (idx < 0) {
-    res.status(404).json({
-      errors: [
-        {
-          message: `Student with id ${id} not found`,
-        },
-      ],
-    });
-    return;
-  }
-
-  const updatedStudent = {
-    ...students[idx],
-    ...updatedFields,
-  };
-
-  students[idx] = updatedStudent;
-
-  res.json({ data: updatedStudent });
+  res.json({ data });
 };
+
 const deleteOne = (req, res) => {
   const { id } = req.params;
 
-  const idx = students.findIndex((student) => student.id === id);
-  if (idx < 0) {
-    res.status(404).json({
-      errors: [
-        {
-          message: `Student with id ${id} not found`,
-        },
-      ],
-    });
-    return;
-  }
-
-  const [deletedStudent] = students.splice(idx, 1);
-  res.json({ data: deletedStudent });
+  const data = StudentService.deleteOne(id);
+  res.json({ data });
 };
 
 module.exports = {

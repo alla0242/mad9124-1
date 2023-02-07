@@ -7,6 +7,6 @@ studentRouter.get("/", studentController.getAll);
 studentRouter.get("/:id", studentController.getOne);
 studentRouter.put("/:id", studentController.replace);
 studentRouter.patch("/:id", studentController.update);
-studentRouter.delete("/:id");
+studentRouter.delete("/:id", studentController.deleteOne);
 
 module.exports = studentRouter;
