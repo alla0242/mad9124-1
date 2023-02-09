@@ -1,3 +1,6 @@
+const createDebug = require("debug");
+const debug = createDebug("app:studentService");
+
 const students = [
   { id: "1", name: "tim", grade: "A+" },
   { id: "2", name: "jad", grade: "A+" },
@@ -7,6 +10,9 @@ const students = [
 
 const create = (name, grade) => {
   const id = parseInt(students[students.length - 1].id, 10) + 1;
+  if (!name || !grade) {
+    debug("Name or Grade missing");
+  }
   const newStudent = {
     id: id.toString(),
     name,
