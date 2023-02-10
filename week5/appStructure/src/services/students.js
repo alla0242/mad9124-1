@@ -1,3 +1,6 @@
+const createDebug = require("debug");
+const debug = createDebug("app:studentService");
+
 // RESOURCE
 const students = [
   { id: "1", name: "tim", grade: "A+" }, //0
@@ -12,6 +15,9 @@ const getAll = () => {
 
 const getOne = (id) => {
   const student = students.find((student) => student.id === id);
+  if (!student) {
+    debug(`Student with id ${id} not found`);
+  }
   // TODO
   //   if (!student) {
   //     res.status(404).json({
