@@ -1,4 +1,5 @@
 const createDebug = require("debug");
+const { NotFoundError, BadRequestError } = require("../utils/errors");
 const debug = createDebug("app:studentService");
 
 // RESOURCE
@@ -16,21 +17,15 @@ const getAll = () => {
 const getOne = (id) => {
   const student = students.find((student) => student.id === id);
   if (!student) {
-    debug(`Student with id ${id} not found`);
+    throw new NotFoundError(`Student with id ${id} not found`);
   }
-  // TODO
-  //   if (!student) {
-  //     res.status(404).json({
-  //       errors: [
-  //         {
-  //           message: `Student with id ${id} not found`,
-  //         },
-  //       ],
-  //     });
   return student;
 };
 
 const create = (name, grade) => {
+  if (!name || !grade) {
+    throw new BadRequestError("Name and Grade required");
+  }
   const id = parseInt(students[students.length - 1].id, 10) + 1;
   const newStudent = {
     id: id.toString(),
@@ -42,40 +37,33 @@ const create = (name, grade) => {
 };
 
 const replace = (id, newStudentData) => {
+  if (!newStudentData.name || !newStudentData.grade) {
+    throw new BadRequestError("Name and Grade required");
+  }
+
   const newStudent = {
     id,
     ...newStudentData,
   };
 
   const idx = students.findIndex((student) => student.id === id);
-  // TODO
-  //   if (idx < 0) {
-  //     res.status(404).json({
-  //       errors: [
-  //         {
-  //           message: `Student with id ${id} not found`,
-  //         },
-  //       ],
-  //     });
-  //     return;
-  //   }
+
+  if (idx < 0) {
+    throw new NotFoundError(`Student with id ${id} not found`);
+  }
 
   students[idx] = newStudent;
   return newStudent;
 };
 
 const update = (id, updatedFields) => {
+  if (!Object.keys(updatedFields).length) {
+    throw new BadRequestError("No changes given");
+  }
   const idx = students.findIndex((student) => student.id === id);
 
   if (idx < 0) {
-    res.status(404).json({
-      errors: [
-        {
-          message: `Student with id ${id} not found`,
-        },
-      ],
-    });
-    return;
+    throw new NotFoundError(`Student with id ${id} not found`);
   }
 
   const updatedStudent = {
@@ -89,17 +77,9 @@ const update = (id, updatedFields) => {
 
 const deleteOne = (id) => {
   const idx = students.findIndex((student) => student.id === id);
-  // TODO
-  //   if (idx < 0) {
-  //     res.status(404).json({
-  //       errors: [
-  //         {
-  //           message: `Student with id ${id} not found`,
-  //         },
-  //       ],
-  //     });
-  //     return;
-  //   }
+  if (idx < 0) {
+    throw new NotFoundError(`Student with id ${id} not found`);
+  }
 
   const [deletedStudent] = students.splice(idx, 1);
   return deletedStudent;
