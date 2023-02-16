@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const isAuthenticated = require("../middleware/isAuthenticated");
 const validateStudentId = require("../middleware/validateStudentId");
 const students = require("../models/students");
 
@@ -11,7 +12,7 @@ studentRouter.use((req, res, next) => {
 });
 
 // CREATE
-studentRouter.post("/", (req, res) => {
+studentRouter.post("/", isAuthenticated, (req, res) => {
   const { name, grade } = req.body;
 
   if (!name || !grade) {
@@ -32,7 +33,8 @@ studentRouter.post("/", (req, res) => {
 });
 
 // READ
-studentRouter.get("/", (_, res) => {
+studentRouter.get("/", (req, res) => {
+  console.log("user", req.user);
   res.json({
     data: students,
   });
@@ -45,7 +47,6 @@ studentRouter.get(
   validateStudentId,
   (req, res) => {
     const { student } = req;
-    console.log("s", student);
     res.json({
       data: student,
     });
@@ -53,7 +54,7 @@ studentRouter.get(
 );
 
 // UPDATE
-studentRouter.put("/:id", validateStudentId, (req, res) => {
+studentRouter.put("/:id", isAuthenticated, validateStudentId, (req, res) => {
   const { student, studentIdx } = req;
   const newStudentData = req.body;
 
@@ -70,7 +71,7 @@ studentRouter.put("/:id", validateStudentId, (req, res) => {
 });
 
 // UPDATE
-studentRouter.patch("/:id", validateStudentId, (req, res) => {
+studentRouter.patch("/:id", isAuthenticated, validateStudentId, (req, res) => {
   const { student, studentIdx } = req;
 
   //   const updatedStudent = {
@@ -91,7 +92,7 @@ studentRouter.patch("/:id", validateStudentId, (req, res) => {
 });
 
 // DELETE
-studentRouter.delete("/:id", validateStudentId, (req, res) => {
+studentRouter.delete("/:id", isAuthenticated, validateStudentId, (req, res) => {
   const { studentIdx } = req;
 
   const [deletedStudent] = students.splice(studentIdx, 1);
