@@ -1,4 +1,6 @@
 const { Router } = require("express");
+const isAuthenticated = require("../middleware/isAuthenticated");
+const isAuthorized = require("../middleware/isAuthorized");
 const validateStudentId = require("../middleware/validateStudentId");
 const students = require("../models/students");
 const studentRouter = Router();
@@ -59,12 +61,18 @@ studentRouter.patch("/:id", validateStudentId, (req, res) => {
   res.json({ data: updatedStudent });
 });
 
-studentRouter.delete("/:id", validateStudentId, (req, res) => {
-  const { studentIndex } = req;
+studentRouter.delete(
+  "/:id",
+  isAuthenticated,
+  isAuthorized("ADMIN"),
+  validateStudentId,
+  (req, res) => {
+    const { studentIndex } = req;
 
-  const [deletedStudent] = students.splice(studentIndex, 1);
+    const [deletedStudent] = students.splice(studentIndex, 1);
 
-  res.json({ data: deletedStudent });
-});
+    res.json({ data: deletedStudent });
+  }
+);
 
 module.exports = studentRouter;
