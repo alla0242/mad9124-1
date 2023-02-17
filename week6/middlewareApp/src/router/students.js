@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const isAuthenticated = require("../middleware/isAuthenticated");
+const isAuthorized = require("../middleware/isAuthorized");
 const validateStudentId = require("../middleware/validateStudentId");
 const students = require("../models/students");
 
@@ -71,32 +72,44 @@ studentRouter.put("/:id", isAuthenticated, validateStudentId, (req, res) => {
 });
 
 // UPDATE
-studentRouter.patch("/:id", isAuthenticated, validateStudentId, (req, res) => {
-  const { student, studentIdx } = req;
+studentRouter.patch(
+  "/:id",
+  isAuthenticated,
+  isAuthorized("USER"),
+  validateStudentId,
+  (req, res) => {
+    const { student, studentIdx } = req;
 
-  //   const updatedStudent = {
-  //       id: student.id,
-  //       // name: student.name,
-  //       grade: student.grade,
-  //       name: req.body.name,
-  //   }
-  // const updatedStudent = Object.assign({}, student, req.body);
-  const updatedStudent = {
-    ...student,
-    ...req.body,
-  };
+    //   const updatedStudent = {
+    //       id: student.id,
+    //       // name: student.name,
+    //       grade: student.grade,
+    //       name: req.body.name,
+    //   }
+    // const updatedStudent = Object.assign({}, student, req.body);
+    const updatedStudent = {
+      ...student,
+      ...req.body,
+    };
 
-  students[studentIdx] = updatedStudent;
+    students[studentIdx] = updatedStudent;
 
-  res.json({ data: updatedStudent });
-});
+    res.json({ data: updatedStudent });
+  }
+);
 
 // DELETE
-studentRouter.delete("/:id", isAuthenticated, validateStudentId, (req, res) => {
-  const { studentIdx } = req;
+studentRouter.delete(
+  "/:id",
+  isAuthenticated,
+  isAuthorized("ADMIN"),
+  validateStudentId,
+  (req, res) => {
+    const { studentIdx } = req;
 
-  const [deletedStudent] = students.splice(studentIdx, 1);
-  res.json({ data: deletedStudent });
-});
+    const [deletedStudent] = students.splice(studentIdx, 1);
+    res.json({ data: deletedStudent });
+  }
+);
 
 module.exports = studentRouter;
