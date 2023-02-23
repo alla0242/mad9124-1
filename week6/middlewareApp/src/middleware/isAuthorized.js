@@ -18,29 +18,3 @@ const isAuthorized = (role) => {
 };
 
 module.exports = isAuthorized;
-
-
-
-
-
-
-
-const addXTo = (x) => (y) => x + y;
-
-
-const add5To = addXto(5);
-const add10To = addXto(10);
-
-add5To(10)
-add5To(12)
-
-
-
-
-
-
-
-
-
-
-

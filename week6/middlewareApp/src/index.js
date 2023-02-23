@@ -6,6 +6,7 @@ const { MulterError } = require("multer");
 const multer = require("multer");
 const logger = require("./middleware/logger");
 const validateUser = require("./middleware/validateUser");
+const mainRouter = require("./router");
 const studentRouter = require("./router/students");
 
 const storage = multer.diskStorage({
@@ -60,7 +61,7 @@ app.post("/user", validateUser, (req, res) => {
   res.json({ some: "thing" });
 });
 
-app.use("/students", studentRouter);
+app.use("/api", mainRouter);
 
 app.use((error, req, res, next) => {
   if (error instanceof MulterError) {
