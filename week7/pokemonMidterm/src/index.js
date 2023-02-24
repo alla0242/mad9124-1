@@ -4,6 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const isAuthenticated = require("./middleware/isAuthenticated");
+const pokemonRouter = require("./router/pokemon");
 const { errorHandler, NotFoundError } = require("./utils/errors");
 
 const app = express();
@@ -15,6 +16,9 @@ app.use(morgan("tiny"));
 app.get("/", isAuthenticated, (req, res) => {
   res.json({ success: true });
 });
+
+// routers go here
+app.use("/api/pokemon", pokemonRouter);
 
 // error handler
 app.use(errorHandler);
