@@ -1,38 +1,27 @@
 const createDebug = require("debug");
 const { NotFoundError, BadRequestError } = require("../utils/errors");
+const Student = require("../models/Student");
 const debug = createDebug("app:studentService");
 
-// RESOURCE
-const students = [
-  { id: "1", name: "tim", grade: "A+" }, //0
-  { id: "2", name: "jad", grade: "A+" }, // 1
-  { id: "3", name: "hena", grade: "A+" },
-  { id: "4", name: "eduardo", grade: "A+" },
-];
-
-const getAll = () => {
-  return students;
+const getAll = async () => {
+  const allStudents = await Student.find();
+  return allStudents;
 };
 
-const getOne = (id) => {
-  const student = students.find((student) => student.id === id);
+const getOne = async (id) => {
+  const student = await Student.findById(id);
   if (!student) {
     throw new NotFoundError(`Student with id ${id} not found`);
   }
   return student;
 };
 
-const create = (name, grade) => {
-  if (!name || !grade) {
-    throw new BadRequestError("Name and Grade required");
-  }
-  const id = parseInt(students[students.length - 1].id, 10) + 1;
-  const newStudent = {
-    id: id.toString(),
+const create = async (name, grade) => {
+  const newStudent = new Student({
     name,
     grade,
-  };
-  students.push(newStudent);
+  });
+  await newStudent.save();
   return newStudent;
 };
 

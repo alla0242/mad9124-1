@@ -1,20 +1,32 @@
 const StudentService = require("../services/students");
 
-const getAll = (_req, res) => {
-  const data = StudentService.getAll();
-  res.json({ data });
+const getAll = async (_req, res, next) => {
+  try {
+    const data = await StudentService.getAll();
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
-const getOne = (req, res) => {
+const getOne = async (req, res, next) => {
   const { id } = req.params;
-  const data = StudentService.getOne(id);
-  res.json({ data });
+  try {
+    const data = await StudentService.getOne(id);
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
-const create = (req, res) => {
+const create = async (req, res, next) => {
   const { name, grade } = req.body;
-  const data = StudentService.create(name, grade);
-  res.status(201).json({ data });
+  try {
+    const data = await StudentService.create(name, grade);
+    res.status(201).json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const replace = (req, res) => {
