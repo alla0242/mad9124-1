@@ -1,6 +1,13 @@
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
+const ownerSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+});
+
 const dogSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -23,6 +30,10 @@ const dogSchema = new mongoose.Schema({
       ref: "dog",
     },
   ],
+  ownerId: {
+    type: ObjectId,
+    ref: "owner",
+  },
 });
 
 module.exports = mongoose.model("dog", dogSchema);

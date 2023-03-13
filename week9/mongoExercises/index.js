@@ -2,6 +2,7 @@ const { ObjectId } = require("mongodb");
 
 require("./db");
 const Dog = require("./models/Dog");
+const Owner = require("./models/Owner");
 
 const createOne = async () => {
   // create a dog, return created dog
@@ -124,11 +125,31 @@ const deleteById = async (id) => {
   // return the deleted dog
 };
 
-const main = async () => {
-  const id = "640a357ab65c1771f3a1b5ef";
+// const main = async () => {
+//   // const id = "640a357ab65c1771f3a1b5ef";
 
-  const res = await deleteById(id);
-  console.log(res);
+//   // const res = await deleteById(id);
+//   // console.log(res);
+
+//   // const owner = new Owner({ name: "tim" });
+//   // const res = await owner.save();
+//   const dog = new Dog({
+//     name: 'dogWithOwner',
+//     dob: Date.now(),
+//     owner: {
+//       name: 'tim'
+//     }
+//   })
+//   const res = await dog.save();
+//   // const res = await Owner.find({});
+//   console.log("res", res);
+// };
+
+const main = async () => {
+  // const dogsFourGoodOrMore = await Dog.find().where("howGood").gte(8);
+  const res = await Owner.find().populate("dogs");
+
+  console.log("d", res);
 };
 
 main();
