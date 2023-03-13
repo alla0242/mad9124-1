@@ -33,6 +33,12 @@ class BadRequestError extends ApiError {
 const errorHandler = (error, _req, res, _next) => {
   debug(error);
 
+  if (error.name === "ValidationError") {
+    res.status(400).json({
+      error: error.message,
+    });
+  }
+
   if (error instanceof ApiError) {
     res.status(error.status).json({
       error: error.message,
