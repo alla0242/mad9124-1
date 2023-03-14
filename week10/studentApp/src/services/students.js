@@ -25,52 +25,43 @@ const create = async (name, grade) => {
   return newStudent;
 };
 
-const replace = (id, newStudentData) => {
+const replace = async (id, newStudentData) => {
   if (!newStudentData.name || !newStudentData.grade) {
     throw new BadRequestError("Name and Grade required");
   }
+  const updatedStudent = await Student.findByIdAndUpdate(id, newStudentData, {
+    returnOriginal: false,
+  });
 
-  const newStudent = {
-    id,
-    ...newStudentData,
-  };
-
-  const idx = students.findIndex((student) => student.id === id);
-
-  if (idx < 0) {
+  if (!updatedStudent) {
     throw new NotFoundError(`Student with id ${id} not found`);
   }
 
-  students[idx] = newStudent;
-  return newStudent;
-};
-
-const update = (id, updatedFields) => {
-  if (!Object.keys(updatedFields).length) {
-    throw new BadRequestError("No changes given");
-  }
-  const idx = students.findIndex((student) => student.id === id);
-
-  if (idx < 0) {
-    throw new NotFoundError(`Student with id ${id} not found`);
-  }
-
-  const updatedStudent = {
-    ...students[idx],
-    ...updatedFields,
-  };
-
-  students[idx] = updatedStudent;
   return updatedStudent;
 };
 
-const deleteOne = (id) => {
-  const idx = students.findIndex((student) => student.id === id);
-  if (idx < 0) {
+const update = async (id, updatedFields) => {
+  if (!Object.keys(updatedFields).length) {
+    throw new BadRequestError("No changes given");
+  }
+  const updatedStudent = await Student.findByIdAndUpdate(id, updatedFields, {
+    returnOriginal: false,
+  });
+
+  if (!updatedStudent) {
     throw new NotFoundError(`Student with id ${id} not found`);
   }
 
-  const [deletedStudent] = students.splice(idx, 1);
+  return updatedStudent;
+};
+
+const deleteOne = async (id) => {
+  const deletedStudent = await Student.findByIdAndDelete(id);
+
+  if (!deletedStudent) {
+    throw new NotFoundError(`Student with id ${id} not found`);
+  }
+
   return deletedStudent;
 };
 

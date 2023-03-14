@@ -29,24 +29,36 @@ const create = async (req, res, next) => {
   }
 };
 
-const replace = (req, res) => {
+const replace = async (req, res, next) => {
   const { id } = req.params;
-  const data = StudentService.replace(id, req.body);
-  res.json({ data });
+  try {
+    const data = await StudentService.replace(id, req.body);
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
-const update = (req, res) => {
+const update = async (req, res, next) => {
   const { id } = req.params;
   const updatedFields = req.body;
-  const data = StudentService.update(id, updatedFields);
+  try {
+    const data = await StudentService.update(id, updatedFields);
 
-  res.json({ data });
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
-const deleteOne = (req, res) => {
+const deleteOne = async (req, res, next) => {
   const { id } = req.params;
-  const deletedStudent = StudentService.deleteOne(id);
-  res.json({ data: deletedStudent });
+  try {
+    const deletedStudent = await StudentService.deleteOne(id);
+    res.json({ data: deletedStudent });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
