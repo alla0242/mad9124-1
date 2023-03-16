@@ -1,9 +1,22 @@
 "use strict";
 
-const mongoose = require("mongoose");
-const { ObjectId } = require("mongodb");
+const { Schema, model } = require("mongoose");
+const { ObjectId } = Schema.Types;
 
-const dogSchema = new mongoose.Schema({
+const ownerSchema = new Schema({
+  name: {
+    type: "String",
+    required: true,
+  },
+  dogs: [
+    {
+      type: ObjectId,
+      ref: "dog",
+    },
+  ],
+});
+
+const dogSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -20,6 +33,7 @@ const dogSchema = new mongoose.Schema({
     default: 5,
   },
   pals: [{ type: ObjectId, ref: "dog" }],
+  owner: ownerSchema,
 });
 
-module.exports = mongoose.model("dog", dogSchema);
+module.exports = model("dog", dogSchema);

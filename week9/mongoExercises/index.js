@@ -1,5 +1,6 @@
 require("./db");
 const Dog = require("./models/Dog");
+const Owner = require("./models/Owner");
 
 const createOne = async () => {
   // create a dog
@@ -102,11 +103,55 @@ const deleteOne = async (id) => {
 
 const main = async () => {
   // call a function
-  const id = "640a8ceeda6defc6c68b0dcf";
-  const res = await deleteOne(id);
-
-  // log it out
-  console.log(res);
+  // const id = "640a8ceeda6defc6c68b0dcf";
+  // const res = await deleteOne(id);
+  // console.log(res)
 };
 
-main();
+const ownerFunction = async () => {
+  // const owner = new Owner({
+  //   name: "tim",
+  //   dogs: ["640a8ceeda6defc6c68b0dd4", "64125162eda84e7231f36a37"],
+  // });
+  // await owner.save();
+  // const owner = await Owner.findById("6412555002fe86f799ebb6ca").populate(
+  //   "dogs, pals"
+  // );
+  // const dylan = await Dog.findByIdAndUpdate(
+  //   "640a8ceeda6defc6c68b0dd4",
+  //   {
+  //     pals: ["640a8ceeda6defc6c68b0dd4"],
+  //   },
+  //   {
+  //     returnOriginal: false,
+  //   }
+  // );
+
+  const dylan1 = await Dog.find({ name: "dylan" });
+  const dylan2 = await Dog.find().where("name").equals("dylan");
+
+  console.log(dylan1);
+  console.log(dylan2);
+};
+
+// main();
+ownerFunction();
+
+// class Test {
+//   constructor(name) {
+//     this.test = name;
+//   }
+
+//   static staticTestMethod() {
+//     console.log("static" + this.test);
+//   }
+
+//   testMethod() {
+//     console.log("not static" + this.test);
+//   }
+// }
+
+// const something = new Test("something");
+
+// console.log(Test.staticTestMethod());
+// console.log(something.testMethod());
