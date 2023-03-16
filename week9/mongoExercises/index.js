@@ -127,11 +127,18 @@ const ownerFunction = async () => {
   //   }
   // );
 
-  const dylan1 = await Dog.find({ name: "dylan" });
-  const dylan2 = await Dog.find().where("name").equals("dylan");
+  const owner = await Owner.findOne({ name: "tim" }).populate({
+    path: "dogs",
+    populate: {
+      path: "pals",
+    },
+  });
+  // const dylan2 = await Dog.find().where("name").equals("dylan");
 
-  console.log(dylan1);
-  console.log(dylan2);
+  owner.dogs.forEach((dog) => {
+    console.log(dog);
+  });
+  // console.log(dylan2);
 };
 
 // main();
