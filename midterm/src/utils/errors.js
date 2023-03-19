@@ -1,6 +1,7 @@
 "use strict";
+
 const createDebug = require("debug");
-const debug = createDebug("app:errorHandler");
+const debug = createDebug("app:ErrorHandler");
 
 class ApiError extends Error {
   name = "ApiError";
@@ -11,9 +12,9 @@ class ApiError extends Error {
   }
 }
 
-class BadRequestError extends ApiError {
-  name = "BadRequestError";
-  status = 400;
+class NotFoundError extends ApiError {
+  name = "NotFoundError";
+  status = 404;
 }
 
 class UnauthorizedError extends ApiError {
@@ -26,9 +27,9 @@ class ForbiddenError extends ApiError {
   status = 403;
 }
 
-class NotFoundError extends ApiError {
-  name = "NotFoundError";
-  status = 404;
+class BadRequestError extends ApiError {
+  name = "BadRequestError";
+  status = 400;
 }
 
 const errorHandler = (error, _req, res, _next) => {

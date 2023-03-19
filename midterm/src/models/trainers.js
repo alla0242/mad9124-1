@@ -1,11 +1,9 @@
-const trainers = [
+module.exports = [
   {
     id: 1,
     firstName: "Ash",
     lastName: "Ketchum",
-    badges: [],
+    badges: ["Boulder"],
     role: "USER",
   },
 ];
-
-module.exports = trainers;

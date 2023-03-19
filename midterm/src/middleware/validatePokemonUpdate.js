@@ -1,28 +1,33 @@
 const { BadRequestError } = require("../utils/errors");
 
-const validatePokemonData = (req, _res, next) => {
+const validatePokemonUpdate = (req, _res, next) => {
   const { name, type, abilities } = req.body;
 
-  if (!name || !type || !abilities) {
-    throw new BadRequestError("Name, Type and Abilities are required");
-  }
-  if (typeof name !== "string") {
+  // re assign req.body to only include the values we want
+  req.body = {
+    ...(name && { name }),
+    ...(type && { type }),
+    ...(abilities && { abilities }),
+  };
+
+  if (name && typeof name !== "string") {
     throw new BadRequestError("Name must be a string");
   }
-  if (typeof type !== "string") {
+  if (type && typeof type !== "string") {
     throw new BadRequestError("Type must be a string");
   }
-  if (typeof abilities === "string") {
+  if (abilities === null) {
+    delete req.body.abilities;
+  } else if (typeof abilities === "string") {
     req.body.abilities = [abilities];
   } else if (Array.isArray(abilities)) {
     if (abilities.some((ability) => typeof ability !== "string")) {
       throw new BadRequestError("Abilities must be a string array");
     }
-  } else {
+  } else if (abilities) {
     throw new BadRequestError("Abilities must be a string array");
   }
-
   return next();
 };
 
-module.exports = validatePokemonData;
+module.exports = validatePokemonUpdate;

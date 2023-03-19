@@ -1,7 +1,7 @@
 {
-  "name": "pokemonMidterm",
+  "name": "pokemonCrud",
   "version": "1.0.0",
-  "description": "My midterm for MAD9124",
+  "description": "Example midterm project",
   "main": "src/index.js",
   "author": "Tim Robillard",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.21"
   },
   "scripts": {
     "dev": "nodemon src/index.js",
