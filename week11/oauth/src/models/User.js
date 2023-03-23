@@ -11,6 +11,7 @@ const userModel = new Schema(
     googleId: {
       type: String,
       required: true,
+      unique: true,
     },
   },
   {
