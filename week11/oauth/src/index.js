@@ -17,6 +17,11 @@ const app = express();
 app.use(express.json());
 app.use(morgan("tiny"));
 
+// app.use((req, res, next) => {
+//   console.log("1", req.user, req.session, req.logout);
+//   return next()
+// });
+
 app.use(
   session({
     resave: false,
@@ -30,9 +35,21 @@ app.use(
     }),
   })
 );
+// app.use((req, res, next) => {
+//   console.log("2", req.user, req.session, req.logout);
+//   return next()
+// });
 
 app.use(passport.initialize());
+// app.use((req, res, next) => {
+//   console.log("3", req.user, req.session, req.logout);
+//   return next()
+// });
 app.use(passport.session());
+// app.use((req, res, next) => {
+//   console.log("4", req.user, req.session, req.logout);
+//   return next()
+// });
 
 app.use((req, res, next) => {
   console.log(req.user);

@@ -36,6 +36,15 @@ passport.use(
   )
 );
 
+// save the entire user in the session
+// passport.serializeUser((user, done) => {
+//   done(null, user);
+// });
+
+// passport.deserializeUser(async (user, done) => {
+//   done(null, user);
+// });
+
 // save only the id in the session
 passport.serializeUser((user, done) => {
   done(null, user._id);
