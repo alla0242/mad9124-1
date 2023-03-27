@@ -12,6 +12,16 @@ const studentSchema = new Schema(
       type: String,
       required: true,
     },
+    options: {
+      videoOff: {
+        type: Boolean,
+        default: true,
+      },
+      tier: {
+        type: String,
+        default: "basic",
+      },
+    },
   },
   {
     timestamps: true,
