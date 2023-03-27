@@ -1,6 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
+const logger = require("./logger");
 mongoose.connect(process.env.MONGO_URL).then(() => {
-  console.log(`Connected to mongo ${process.env.MONGO_URL}`);
+  logger.error(`Connected to mongo ${process.env.MONGO_URL}`);
 });
